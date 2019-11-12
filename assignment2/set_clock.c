@@ -11,6 +11,7 @@ set_task for setting the clock
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <semaphore.h>
 
 #include "si_ui.h"
 
@@ -119,7 +120,7 @@ void time_from_set_message(char message[], int *hours, int *minutes, int *second
 /* time_ok: returns nonzero if hours, minutes and seconds represents a valid time */
 int time_ok(int hours, int minutes, int seconds)
 {
-    return hours >= 1 && hours <= 12 && minutes >= 0 && minutes <= 59 &&
+    return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59 &&
         seconds >= 0 && seconds <= 59;
 }
 
