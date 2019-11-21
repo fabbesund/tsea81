@@ -181,4 +181,6 @@ int main(void)
   pthread_join(alarmThreadHandle, NULL);
   pthread_join(setThreadHandle, NULL);
 
+  return 0;
+
 }

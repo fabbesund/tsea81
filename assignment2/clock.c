@@ -136,17 +136,21 @@ int timeOK(int hours, int minutes, int seconds)
 
 void resetAlarm()
 {
+  pthread_mutex_lock(&Clock.mutex);
   Clock.alarmTime.hours = 0;
   Clock.alarmTime.minutes = 0;
   Clock.alarmTime.seconds = 0;
 
   //alarm is not enabled
   Clock.alarmEnabled = 0;
+  pthread_mutex_unlock(&Clock.mutex);
 }
 
 int alarmEnabled()
 {
+  pthread_mutex_lock(&Clock.mutex);
   return Clock.alarmEnabled;
+  pthread_mutex_unlock(&Clock.mutex);
 }
 
 
