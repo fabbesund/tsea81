@@ -135,9 +135,19 @@ static void *user_thread(void *unused)
 		else if(!strcmp(message, "unpause")) {
 			debug_unpause();
 		}
-		/*else if(!strcmp(message, "test")) {
+		else if(!strcmp(message, "test")) {
+			debug_override(1, 2, 4);
+			debug_override(2, 2, 4);
+			debug_override(3, 2, 4);
+			debug_override(4, 2, 4);
+			debug_override(5, 2, 4);
+			debug_override(6, 2, 4);
+			debug_override(7, 2, 4);
+			debug_override(8, 2, 4);
+			debug_override(9, 2, 4);
+			debug_override(10, 2, 4);
 
-		}*/
+		}
 		else {
 			si_ui_show_error("Unknown command");
 		}
