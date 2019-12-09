@@ -12,11 +12,11 @@
 #include <unistd.h>
 
 /* panic function, to be called when fatal errors occur */
-static void lift_panic(const char message[])
+static void lift_panic()
 {
-    printf("LIFT_PANIC!!! ");
-    printf("%s", message);
-    printf("\n");
+    //printf("LIFT_PANIC!!! ");
+    //printf("%s", message);
+    //printf("\n");
     exit(0);
 }
 
@@ -117,7 +117,7 @@ void lift_move(lift_type lift, int next_floor, int change_direction)
 #ifdef NEWGUI
 
     /* passengers/travellers have two seconds to leave/enter lift */
-    usleep(2000000);
+    //usleep(2000000);
 
     /* reserve lift */
     pthread_mutex_lock(&lift->mutex);
@@ -126,13 +126,13 @@ void lift_move(lift_type lift, int next_floor, int change_direction)
     lift->moving = 1;
 
     /* draw, since a change has occurred, lift will be red */
-    draw_lift(lift);
+    //draw_lift(lift);
 
     /* release lift */
     pthread_mutex_unlock(&lift->mutex);
 
     /* it takes a second to close doors */
-    usleep(1000000);
+    //usleep(1000000);
 
 
 
@@ -149,13 +149,13 @@ void lift_move(lift_type lift, int next_floor, int change_direction)
     }
 
     /* draw, since a change has occurred, lift now at next floor */
-    draw_lift(lift);
+    //draw_lift(lift);
 
     /* release lift */
     pthread_mutex_unlock(&lift->mutex);
 
     /* it takes a second to open doors */
-    usleep(1000000);
+    //usleep(1000000);
 
 
 
@@ -166,7 +166,7 @@ void lift_move(lift_type lift, int next_floor, int change_direction)
     lift->moving = 0;
 
     /* draw, since a change has occurred, lift will be green */
-    draw_lift(lift);
+    //draw_lift(lift);
 
     /* release lift */
     pthread_mutex_unlock(&lift->mutex);
@@ -183,7 +183,7 @@ void lift_move(lift_type lift, int next_floor, int change_direction)
     pthread_mutex_unlock(&lift->mutex);
 
     /* it takes two seconds to move to the next floor */
-    usleep(2000000);
+    //usleep(2000000);
 
     /* reserve lift */
     pthread_mutex_lock(&lift->mutex);
@@ -201,7 +201,7 @@ void lift_move(lift_type lift, int next_floor, int change_direction)
       }
 
     /* draw, since a change has occurred */
-    draw_lift(lift);
+    //draw_lift(lift);
 
     /* release lift */
     pthread_mutex_unlock(&lift->mutex);
@@ -300,7 +300,7 @@ static void enter_floor(lift_type lift, int id, int floor, int to_floor)
 
     if (!found)
     {
-        lift_panic("cannot enter floor");
+        lift_panic();
     }
 
     /* enter floor at index floor_index */
@@ -336,7 +336,7 @@ static void leave_floor(
 
     if (!found)
     {
-        lift_panic("cannot leave floor");
+        lift_panic();
     }
 
     /* leave floor at index floor_index */

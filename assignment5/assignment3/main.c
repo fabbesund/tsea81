@@ -5,6 +5,7 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <sys/prctl.h>
+#include <sys/time.h>
 #include "lift.h"
 #include "si_ui.h"
 #include "debug.h"
@@ -74,13 +75,21 @@ static void *passenger_thread(void *idptr)
 
 	int *tmp = (int *) idptr;
 	int id = *tmp;
+	sem_post(&(Lift->sem));
 
-        // Sets a unique name shown in debuggers
-        char buf[100];
-        sprintf(buf, "Passenger #%d", id);
+  // Sets a unique name shown in debuggers
+  char buf[100];
+  sprintf(buf, "Passenger #%d", id);
 	prctl(PR_SET_NAME,buf,0,0,0);
 
-	while(1){
+	int iterations = 0;
+	struct timeval starttime;
+	struct timeval endtime;
+	long long int timediff = 0;
+	long long int total_time = 0;
+
+	while(1) {
+		gettimeofday(&starttime, NULL);
 		// * Select random floors
 		// * Travel between these floors
 		// * Wait a little while (~5 seconds)
@@ -91,7 +100,15 @@ static void *passenger_thread(void *idptr)
 		}
 		debug_check_override(id, &random_floor_start, &random_floor_end);
 		lift_travel(Lift, id, random_floor_start, random_floor_end);
-		sleep(5);
+		//sleep(5);
+		gettimeofday(&endtime, NULL);
+		timediff = (endtime.tv_sec * 1000000ULL + endtime.tv_usec) - (starttime.tv_sec * 1000000ULL + starttime.tv_usec);
+		total_time = total_time + timediff;
+		//printf("%d\n", iterations);
+		if(iterations == N_ITERATIONS) {
+			printf("Time for id %d is done and took %d micro seconds.\n", id, total_time);
+		}
+		iterations++;
 	}
 	return NULL;
 }
@@ -153,6 +170,7 @@ static void *user_thread(void *unused)
 			while (current_passenger_id < MAX_N_PERSONS) {
 				int tmp_passenger_id = current_passenger_id;
 				pthread_create(&passenger_thread_handle[tmp_passenger_id], NULL, passenger_thread, (void*)&tmp_passenger_id);
+				sem_wait(&(Lift->sem));
 				current_passenger_id++;
 			}
 		}
